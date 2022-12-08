@@ -1,163 +1,71 @@
 """Employee pay calculator."""
 """ENTER YOUR SOLUTION HERE!"""
 
-#class Employee:
-    #def __init__(self, name):
-     #   self.name = name
+class Bonus:
+    def __init__(self,rate):
+        self.value = rate
 
-    #def get_pay(self):
-     #   pass
-
-    #def __str__(self):
-        #return self.name
+class ContractCommission:
+    def __init__(self, num_of_contract, rate_per_contract):
+        self.description = f"commission for {num_of_contract} contract(s) at {rate_per_contract}/contract"
+        self.value = num_of_contract * rate_per_contract
 
 class Employee:
-    commission = False
-    def __init__(self, name, rate, numberOfContracts, isCommissioned = None):
+    def __init__(self, name, commission):
         self.name = name
-        self.rate = rate
-        self.numberOfContracts = numberOfContracts
-        if isCommissioned is None:
-            isCommissioned = self.commission
-        else:
-            self.commission = isCommissioned
+        self.commission = commission
 
-    def setName(self, name):
-        self.name = name
+    def get_pay(self):
+        if self.commission:
+            self.get_base_pay() + self.commission.value
+        return self.get_base_pay()
 
-    def getName(self):
-        return self.name
-
-    def getRate(self):
-        return self.rate
-
-    def getNumberOfContracts(self):
-        return self.numberOfContracts
-
-    def getIsCommissioned(self):
-        return self.commission
-
-
+    def __str__(self):
+        if self.commission:
+            return f"{self.name} works on a {self.get_contract_desc()}" + \
+            (f" and receives a {self.commission.description}") + \
+                f". Their total pay is {self.get_pay()}."
+        return f"{self.name} works on a {self.get_contract_desc()}" + \
+                f". Their total pay is {self.get_pay()}."
 
 class SalariedEmployee(Employee):
-    def __init__(self, name, rate, numberOfContracts,commissionRate, isCommissioned = None):
-        super().__init__(name, rate, numberOfContracts, isCommissioned)
-        self.commissionRate = commissionRate
+    def __init__(self, name, base_salary, commission = None):
+        super().__init__(name, commission)
+        self.base_salary = base_salary
 
-    def getCommissionRate(self):
-        return self.commissionRate
+    def get_contract_desc(self):
+        return f"monthly salary of {self.base_salary}"
+    
+    def get_base_pay(self):
+        return self.base_salary
 
 
 
 class HourlyEmployee(Employee):
-    def __init__(self, name, rate, numberOfContracts,commissionRate,hoursWorked, isCommissioned = None):
-        super().__init__(name, rate, numberOfContracts, isCommissioned)
-        self.commissionRate = commissionRate
-        self.hoursWorked = hoursWorked
+    def __init__(self, name, rate_per_hour, hours_worked, commission=None):
+        super().__init__(name,commission)
+        self.rate_per_hour = rate_per_hour
+        self.hours_worked = hours_worked
 
-    def getCommissionRate(self):
-        return self.commissionRate
+    def get_base_pay(self):
+        return self.rate_per_hour * self.hours_worked
 
-    def getHoursWorked(self):
-        return self.hoursWorked
-
-
-
-class Payroll:
-    def __init__(self, Employee):
-        self.Employee = Employee
-
-    def hourlyPay(self):
-        return self.Employee.getRate() * self.Employee.getHoursWorked()
-
-    def getPay(self):
-        if self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, HourlyEmployee) and \
-         self.Employee.getNumberOfContracts() > 0:
-                return (self.Employee.getRate() * self.Employee.getHoursWorked()) + \
-                        (self.Employee.getCommissionRate() * self.Employee.getNumberOfContracts())
-
-        elif not self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, HourlyEmployee) and \
-         self.Employee.getCommissionRate() == 0:
-             return self.Employee.getRate() * self.Employee.getHoursWorked()
-
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, SalariedEmployee) and \
-         self.Employee.getNumberOfContracts() == 0:
-                return self.Employee.getRate() + self.Employee.getCommissionRate()
-
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, HourlyEmployee) and \
-         self.Employee.getNumberOfContracts() == 0:
-                return (self.Employee.getRate() * self.Employee.getHoursWorked()) \
-                             + self.Employee.getCommissionRate()
-
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, SalariedEmployee) and \
-         self.Employee.getNumberOfContracts() > 0:
-                return self.Employee.getRate() + \
-                        (self.Employee.getCommissionRate() * self.Employee.getNumberOfContracts())
-
-        else:
-            return self.Employee.getRate()
-
-    def str(self):
-        if not self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, HourlyEmployee) and \
-         self.Employee.getCommissionRate() == 0:
-            return f"{self.Employee.getName()} works on a contract of {self.Employee.getHoursWorked()} hours at {self.Employee.getRate()}/hour. Their total pay is {self.getPay()}."
-        
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, SalariedEmployee) and \
-         self.Employee.getNumberOfContracts() > 0:
-            return f"{self.Employee.getName()} works on a monthly salary of {self.Employee.getRate()} and receives a commission for {self.Employee.getNumberOfContracts()} contract(s) at {self.Employee.getCommissionRate()}/contract. Their total pay is {self.getPay()}."
-
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, HourlyEmployee) and \
-         self.Employee.getNumberOfContracts() > 0:
-            return f"{self.Employee.getName()} works on a contract of {self.Employee.getHoursWorked()} hours at {self.Employee.getRate()}/hour and receives a commission for {self.Employee.getNumberOfContracts()} contract(s) at {self.Employee.getCommissionRate()}/contract. Their total pay is {self.getPay()}."
-
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, SalariedEmployee) and \
-         self.Employee.getNumberOfContracts() == 0:
-            return f"{self.Employee.getName()} works on a monthly salary of {self.Employee.getRate()} and receives a bonus commission of {self.Employee.getCommissionRate()}. Their total pay is {self.getPay()}."
-        
-        elif self.Employee.getIsCommissioned() and \
-         isinstance(self.Employee, HourlyEmployee) and \
-         self.Employee.getNumberOfContracts() == 0:
-            return f"{self.Employee.getName()} works on a contract of {self.Employee.getHoursWorked()} hours at {self.Employee.getRate()}/hour and receives a bonus commission of {self.Employee.getCommissionRate()}. Their total pay is {self.getPay()}."
-
-        else:
-            return f"{self.Employee.getName()} works on a monthly salary of {self.getPay()}. Their total pay is {self.getPay()}."
+    def get_contract_desc(self):
+        return f"contract of {self.hours_worked} hours at {self.rate_per_hour}/hour"
+    
+    
 
 
-billie = SalariedEmployee("Billie", 4000, 0,0)
-charlie = HourlyEmployee("Charlie", 25, 0,0,100)
-renee = SalariedEmployee("Renee", 3000, 4, 200, True)
+billie = SalariedEmployee("Billie", 4000)
+charlie = HourlyEmployee("Charlie", 25,100)
+renee = SalariedEmployee("Renee", 3000, ContractCommission(4, 200))
+"""
 jan = HourlyEmployee("Jan", 25, 3, 220, 150, True)
 robbie = SalariedEmployee("Robbie", 2000, 0, 1500, True)
-ariel = HourlyEmployee("Ariel", 30, 0, 600, 120, True)
+ariel = HourlyEmployee("Ariel", 30, 0, 600, 120, True)"""
 
-billiePayroll = Payroll(billie)
-charliePayroll = Payroll(charlie)
-reneePayroll = Payroll(renee)
-janPayroll = Payroll(jan)
-robbiePayroll = Payroll(robbie)
-arielPayroll = Payroll(ariel)
+print(renee)
 
-
-print(billiePayroll.str())
-print()
-print(charliePayroll.str())
-print()
-print(reneePayroll.str())
-print()
-print(janPayroll.str())
-print()
-print(robbiePayroll.str())
-print()
-print(arielPayroll.str())
 
 # Billie works on a monthly salary of 4000.  Their total pay is 4000.
 #billie = Employee('Billie')
