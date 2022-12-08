@@ -4,6 +4,7 @@
 class Bonus:
     def __init__(self,rate):
         self.value = rate
+        self.description = f"a bonus commission of {rate}"
 
 class ContractCommission:
     def __init__(self, num_of_contract, rate_per_contract):
@@ -17,7 +18,7 @@ class Employee:
 
     def get_pay(self):
         if self.commission:
-            self.get_base_pay() + self.commission.value
+            return self.get_base_pay() + self.commission.value
         return self.get_base_pay()
 
     def __str__(self):
@@ -59,12 +60,12 @@ class HourlyEmployee(Employee):
 billie = SalariedEmployee("Billie", 4000)
 charlie = HourlyEmployee("Charlie", 25,100)
 renee = SalariedEmployee("Renee", 3000, ContractCommission(4, 200))
-"""
-jan = HourlyEmployee("Jan", 25, 3, 220, 150, True)
-robbie = SalariedEmployee("Robbie", 2000, 0, 1500, True)
-ariel = HourlyEmployee("Ariel", 30, 0, 600, 120, True)"""
+jan = HourlyEmployee("Jan", 25, 150,ContractCommission(3, 220))
+robbie = SalariedEmployee("Robbie", 2000,Bonus(1500))
+ariel = HourlyEmployee("Ariel", 30, 120, Bonus(600))
 
 print(renee)
+print(ariel)
 
 
 # Billie works on a monthly salary of 4000.  Their total pay is 4000.
