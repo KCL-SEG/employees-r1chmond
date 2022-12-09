@@ -4,7 +4,7 @@
 class Bonus:
     def __init__(self,rate):
         self.value = rate
-        self.description = f"a bonus commission of {rate}"
+        self.description = f"bonus commission of {rate}"
 
 class ContractCommission:
     def __init__(self, num_of_contract, rate_per_contract):
@@ -64,7 +64,7 @@ jan = HourlyEmployee("Jan", 25, 150,ContractCommission(3, 220))
 robbie = SalariedEmployee("Robbie", 2000,Bonus(1500))
 ariel = HourlyEmployee("Ariel", 30, 120, Bonus(600))
 
-print(renee)
+print(robbie)
 print(ariel)
 
 
